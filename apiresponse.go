@@ -45,3 +45,19 @@ func (r Responder) OK(data interface{}) {
 func (r Responder) InternalServerError() {
 	r.write(http.StatusInternalServerError, nil)
 }
+
+func (r Responder) NotFound() {
+	r.write(http.StatusNotFound, nil)
+}
+
+func (r Responder) Created(data interface{}) {
+	r.write(http.StatusCreated, data)
+}
+
+func (r Responder) NoContent() {
+	r.write(http.StatusNoContent, nil)
+}
+
+func (r Responder) BadRequest() {
+	r.write(http.StatusBadRequest, nil)
+}
