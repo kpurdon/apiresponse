@@ -1,1 +1,1 @@
-module github.com/kpurdon/apiresponse
+module github.com/kpurdon/apiresponse/v2
