@@ -1,4 +1,4 @@
-//go:generate generator --out-file=$PWD/helpers.go
+//go:generate ./generate_helpers.sh
 
 package apiresponse
 
