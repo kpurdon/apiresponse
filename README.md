@@ -1,4 +1,8 @@
-[![Build Status](https://travis-ci.org/kpurdon/apiresponse.svg?branch=master)](https://travis-ci.org/kpurdon/apiresponse)
+[![travis ci status](https://travis-ci.org/kpurdon/apiresponse.svg?branch=master)](https://travis-ci.org/kpurdon/apiresponse)
+[![codecov status](https://codecov.io/gh/kpurdon/apiresponse/branch/master/graph/badge.svg)](https://codecov.io/gh/kpurdon/apiresponse)
+[![godoc](https://godoc.org/github.com/kpurdon/apiresponse?status.svg)](http://godoc.org/github.com/kpurdon/apiresponse)
+[![Go Report Card](https://goreportcard.com/badge/github.com/kpurdon/apiresponse)](https://goreportcard.com/report/github.com/kpurdon/apiresponse)
+
 
 apiresponse
 -----
