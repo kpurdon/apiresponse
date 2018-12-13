@@ -47,6 +47,7 @@ func (r *Responder) write(statusCode int) {
 
 	b, err := json.Marshal(r.data)
 	if err != nil {
+		r.WithData(nil)
 		r.InternalServerError()
 		return
 	}

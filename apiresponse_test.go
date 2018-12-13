@@ -32,13 +32,14 @@ func TestResponderWrite(t *testing.T) {
 	testCases := []struct {
 		label          string
 		modFunc        func(r *Responder)
-		expectedCode   string
+		expectedCode   int
 		expectedHeader http.Header
 		expectedBody   string
 	}{
 		{
-			label:   "no modifiers",
-			modFunc: func(r *Responder) {},
+			label:        "no modifiers",
+			modFunc:      func(r *Responder) {},
+			expectedCode: 200,
 			expectedHeader: http.Header{
 				"Content-Type": []string{"application/json"},
 			},
@@ -48,15 +49,27 @@ func TestResponderWrite(t *testing.T) {
 			modFunc: func(r *Responder) {
 				r.WithData(struct{ Test string }{Test: "test"})
 			},
+			expectedCode: 200,
 			expectedHeader: http.Header{
 				"Content-Type": []string{"application/json"},
 			},
 			expectedBody: `{"Test":"test"}`,
 		}, {
+			label: "with unsupported data (cant be JSON marshaled)",
+			modFunc: func(r *Responder) {
+				r.WithData(make(chan int)) // any unsuported type works
+			},
+			expectedCode: 500,
+			expectedHeader: http.Header{
+				"Content-Type": []string{"application/json"},
+			},
+			expectedBody: `{"status_code":500,"status_text":"Internal Server Error"}`,
+		}, {
 			label: "with header",
 			modFunc: func(r *Responder) {
 				r.WithHeader("testkey", "testvalue")
 			},
+			expectedCode: 200,
 			expectedHeader: http.Header{
 				"Content-Type": []string{"application/json"},
 				"testkey":      []string{"testvalue"},
@@ -68,6 +81,7 @@ func TestResponderWrite(t *testing.T) {
 				r.WithData(struct{ Test string }{Test: "test"})
 				r.WithHeader("testkey", "testvalue")
 			},
+			expectedCode: 200,
 			expectedHeader: http.Header{
 				"Content-Type": []string{"application/json"},
 				"testkey":      []string{"testvalue"},
@@ -88,7 +102,7 @@ func TestResponderWrite(t *testing.T) {
 			tc.modFunc(actual)
 			actual.OK()
 
-			assert.Equal(t, 200, w.Code)
+			assert.Equal(t, tc.expectedCode, w.Code)
 			for k, v := range tc.expectedHeader {
 				assert.Equal(t, v[0], w.Header().Get(k))
 			}
