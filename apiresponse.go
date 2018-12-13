@@ -10,30 +10,30 @@ import (
 // Responder is the base type which all helper methods hang on. It should be initialized with the
 // NewResponder method.
 type Responder struct {
-	w    http.ResponseWriter
 	data interface{}
+	http.ResponseWriter
 }
 
 // NewResponder initializes a new Responder with the http.ResponseWriter embedded.
 func NewResponder(w http.ResponseWriter) *Responder {
 	return &Responder{
-		w:    w,
-		data: nil,
+		data:           nil,
+		ResponseWriter: w,
 	}
 }
 
 // WithData attaches data to the Responder which will be marshaled to JSON when the response is
 // written.
-func (r Responder) WithData(data interface{}) {
+func (r *Responder) WithData(data interface{}) {
 	r.data = data
 }
 
 // WithHeader attaches a header to the Responder.
-func (r Responder) WithHeader(key, value string) {
-	r.w.Header().Set(key, value)
+func (r *Responder) WithHeader(key, value string) {
+	r.Header().Set(key, value)
 }
 
-func (r Responder) write(statusCode int) {
+func (r *Responder) write(statusCode int) {
 	if r.data == nil {
 		// TODO: something more useful?
 		r.data = struct {
@@ -51,7 +51,7 @@ func (r Responder) write(statusCode int) {
 		return
 	}
 
-	r.w.Header().Set("Content-Type", "application/json")
-	r.w.WriteHeader(statusCode)
-	r.w.Write(b)
+	r.Header().Set("Content-Type", "application/json")
+	r.WriteHeader(statusCode)
+	r.Write(b)
 }
