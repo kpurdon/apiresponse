@@ -1,5 +1,6 @@
 //go:generate ./generate_helpers.sh
 
+// Package apiresponse provides a simple helper for writing JSON formatted responses in an HTTP API.
 package apiresponse
 
 import (
