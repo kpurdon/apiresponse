@@ -1,0 +1,7 @@
+
+func TestResponder{{.Name}}(t *testing.T) {
+	w := httptest.NewRecorder()
+	actual := NewResponder(w)
+	actual.{{.Name}}()
+	assert.Equal(t, http.Status{{.Name}}, w.Code)
+}
