@@ -8,6 +8,13 @@ import (
 	"net/http"
 )
 
+// GenericError is returned when no specific data is included (via responder.WithData()).
+// TODO: this type could potentially be more useful?
+type GenericError struct {
+	StatusCode int    `json:"status_code"`
+	StatusText string `json:"status_text"`
+}
+
 // Responder is the base type which all helper methods hang on. It should be initialized with the
 // NewResponder method.
 type Responder struct {
@@ -36,11 +43,7 @@ func (r *Responder) WithHeader(key, value string) {
 
 func (r *Responder) write(statusCode int) {
 	if r.data == nil {
-		// TODO: something more useful?
-		r.data = struct {
-			StatusCode int    `json:"status_code"`
-			StatusText string `json:"status_text"`
-		}{
+		r.data = &GenericError{
 			StatusCode: statusCode,
 			StatusText: http.StatusText(statusCode),
 		}
