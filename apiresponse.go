@@ -58,5 +58,7 @@ func (r *Responder) write(statusCode int) {
 
 	r.Header().Set("Content-Type", "application/json")
 	r.WriteHeader(statusCode)
-	r.Write(b)
+	if _, err := r.Write(b); err != nil {
+		r.InternalServerError()
+	}
 }
